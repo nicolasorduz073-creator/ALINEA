@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: alinea-telecomunicaciones
+    runtime: python
+    rootDir: alinea
+    buildCommand: pip install -r requirements.txt && python -m db.seed
+    startCommand: gunicorn web.app:app --bind 0.0.0.0:$PORT --workers 1 --threads 4
+    healthCheckPath: /
+    envVars:
+      - key: ALINEA_SECRET_KEY
+        generateValue: true
+      - key: ALINEA_COOKIE_SECURE
+        value: "1"
