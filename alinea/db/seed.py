@@ -2,6 +2,7 @@
 Uso:  python -m db.seed
 """
 import random, pathlib
+from urllib.parse import quote_plus
 from db.conexion import conectar, RUTA_BD, RAIZ
 from nlp.extractor import construir_diccionario, extraer
 
@@ -347,6 +348,18 @@ for clave_programa, titulos in OFERTAS_ADICIONALES_POR_PROGRAMA.items():
     programa = next((nombre for nombre in OFERTAS_POR_PROGRAMA if clave_programa in nombre), None)
     if programa:
         OFERTAS_POR_PROGRAMA[programa].extend(titulos)
+
+# LinkedIn cierra o redirige las publicaciones individuales con frecuencia.
+# Usamos una búsqueda viva por cargo, empresa y ciudad para que el botón nunca
+# apunte a una página caducada y siempre muestre vacantes recientes.
+for oferta in OFERTAS_REALES:
+    if "linkedin" in oferta["fuente"].lower():
+        consulta = " ".join((oferta["titulo"], oferta["empresa"]))
+        oferta["url"] = (
+            "https://www.linkedin.com/jobs/search/?keywords="
+            f"{quote_plus(consulta)}&location={quote_plus(oferta['ciudad'])}&f_TPR=r2592000"
+        )
+        oferta["fuente"] = "LinkedIn · búsqueda reciente"
 
 FRASES = {"Python":"Experiencia en {} para automatizar procesos","SQL":"Dominio de {} y modelado de datos","Git":"Manejo de {} en trabajo colaborativo",
  "Docker":"Despliegues con {}","Computación en la nube":"Conocimientos de {} (AWS o Azure)","Gestión de proyectos":"Deseable {} con Scrum",
