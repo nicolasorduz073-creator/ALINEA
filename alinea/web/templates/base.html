@@ -721,7 +721,7 @@
     <div class="assistant-messages" id="assistant-messages"><div class="assistant-message">Hola. Puedo ayudarte a encontrar carreras, habilidades, ofertas y rutas para aprender. ¿Qué estás buscando?</div></div>
     <form class="assistant-form" id="assistant-form"><input id="assistant-input" maxlength="300" placeholder="Ej.: ofertas de redes en Bogotá" autocomplete="off" required><button type="submit">Enviar</button></form>
   </aside>
-  <div class="cookie-banner" id="cookie-banner" hidden role="dialog" aria-modal="true" aria-labelledby="cookie-title"><div class="cookie-dialog"><span class="eyebrow">Antes de comenzar</span><h2 id="cookie-title">Tu privacidad es importante.</h2><p>Usamos una cookie técnica para mantener tu sesión y recordar tu consentimiento. No guardamos contraseñas. <a href="/seguridad">Ver seguridad</a>.</p><button id="cookie-accept" type="button">Aceptar y continuar</button></div></div>
+  <div class="cookie-banner" id="cookie-banner" role="dialog" aria-modal="true" aria-labelledby="cookie-title"><div class="cookie-dialog"><span class="eyebrow">Antes de comenzar</span><h2 id="cookie-title">Tu privacidad es importante.</h2><p>Usamos una cookie técnica para mantener tu sesión y recordar tu consentimiento. No guardamos contraseñas. <a href="/seguridad">Ver seguridad</a>.</p><button id="cookie-accept" type="button">Aceptar y continuar</button></div></div>
   <script>
   (() => {
     const root = document.documentElement;
@@ -751,7 +751,7 @@
   (() => {
     const form=document.getElementById('registration-form'), status=document.getElementById('registration-status'); if(!form)return; form.addEventListener('submit',async event=>{ event.preventDefault(); const data=Object.fromEntries(new FormData(form)); data.cookies=true; status.textContent='Validando correo institucional...'; try { const response=await fetch('/api/registro',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); const result=await response.json(); status.textContent=result.mensaje || 'No se pudo completar el registro.'; if(result.ok){ status.style.color='#24734f'; form.reset(); } } catch(error){ status.textContent='No se pudo conectar con ALINEA.'; } });
   })();
-  (() => { const banner=document.getElementById('cookie-banner'), accept=document.getElementById('cookie-accept'), consentKey='alinea-cookie-consent-v2'; if(!localStorage.getItem(consentKey)) banner.hidden=false; accept.addEventListener('click',()=>{ localStorage.setItem(consentKey,'accepted'); banner.hidden=true; fetch('/api/cookies',{method:'POST'}); }); })();
+  (() => { const banner=document.getElementById('cookie-banner'), accept=document.getElementById('cookie-accept'), consentKey='alinea-cookie-consent-v3'; if(localStorage.getItem(consentKey)) banner.hidden=true; accept.addEventListener('click',()=>{ localStorage.setItem(consentKey,'accepted'); banner.hidden=true; fetch('/api/cookies',{method:'POST'}); }); })();
   </script>
 </body>
 </html>
