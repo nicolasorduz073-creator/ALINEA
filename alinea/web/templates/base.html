@@ -686,6 +686,21 @@
     .cookie-dialog { border-radius: 7px; box-shadow: 0 18px 45px rgba(17,24,39,.18); }.cookie-banner { background: rgba(17,24,39,.42); }
     footer { border-top: 1px solid #e4e4e7; }
     @media (max-width:720px) { .w { padding: 22px 16px 40px; } .site-head { align-items:flex-start; flex-direction:column; margin-bottom:28px; } nav { justify-content:flex-start; } .figma-hero-copy { padding:34px 24px; } .figma-metrics article { border-right:0; border-bottom:1px solid #e4e4e7; } .figma-metrics article:last-child { border-bottom:0; } }
+    /* Dark mode: azul claro y contraste AA, sin texto apagado. */
+    html[data-theme="dark"] { --ink:#f8fafc; --mute:#cbd5e1; --line:#334155; --brand:#93c5fd; --brand-dark:#bfdbfe; --tint:#172554; --bg:#0f172a; --card:#111827; }
+    html[data-theme="dark"] body, html[data-theme="dark"] .w { color:#f8fafc; background:#0f172a; }
+    html[data-theme="dark"] h1, html[data-theme="dark"] h2, html[data-theme="dark"] h3, html[data-theme="dark"] h4, html[data-theme="dark"] h5, html[data-theme="dark"] h6, html[data-theme="dark"] .figma-hero-copy h2, html[data-theme="dark"] .figma-heading h2, html[data-theme="dark"] .academic-intro h2, html[data-theme="dark"] .figma-cta h2 { color:#f8fafc !important; }
+    html[data-theme="dark"] .sub, html[data-theme="dark"] .mute, html[data-theme="dark"] .source-note, html[data-theme="dark"] .offer-meta, html[data-theme="dark"] .offer-requirements, html[data-theme="dark"] .figma-card-body p, html[data-theme="dark"] .figma-hero-copy p { color:#cbd5e1 !important; }
+    html[data-theme="dark"] nav a, html[data-theme="dark"] .offer-link, html[data-theme="dark"] .resource-link, html[data-theme="dark"] td a, html[data-theme="dark"] .figma-card-body strong, html[data-theme="dark"] .eyebrow { color:#93c5fd !important; }
+    html[data-theme="dark"] nav a:hover, html[data-theme="dark"] nav a.active { color:#eff6ff !important; background:#1e3a8a !important; }
+    html[data-theme="dark"] .figma-home-hero, html[data-theme="dark"] .figma-metrics, html[data-theme="dark"] .figma-metrics article, html[data-theme="dark"] .figma-career-card, html[data-theme="dark"] .offer-card, html[data-theme="dark"] .career-card, html[data-theme="dark"] .learning-card, html[data-theme="dark"] .p, html[data-theme="dark"] .registration-card { border-color:#334155; background:#111827; }
+    html[data-theme="dark"] .figma-metrics strong, html[data-theme="dark"] .offer-salary, html[data-theme="dark"] .kpi strong, html[data-theme="dark"] .big, html[data-theme="dark"] .academic-stats strong { color:#bfdbfe; }
+    html[data-theme="dark"] .figma-hero-copy h2 em { color:#93c5fd; }
+    html[data-theme="dark"] th { color:#cbd5e1; background:#1e293b; } html[data-theme="dark"] th, html[data-theme="dark"] td { border-color:#334155; } html[data-theme="dark"] tbody tr:hover { background:#172033; }
+    html[data-theme="dark"] input, html[data-theme="dark"] select, html[data-theme="dark"] .offer-tools input, html[data-theme="dark"] .offer-tools select { color:#f8fafc; background:#111827; border-color:#475569; }
+    html[data-theme="dark"] .offer-skills a, html[data-theme="dark"] .tag, html[data-theme="dark"] .profile-list span { color:#bfdbfe !important; background:#172554; border-color:#1d4ed8; }
+    html[data-theme="dark"] .button-quiet { color:#bfdbfe; border-color:#475569; background:#111827; } html[data-theme="dark"] .button-quiet:hover { color:#fff; background:#1e3a8a; border-color:#93c5fd; }
+    html[data-theme="dark"] .offer-tools, html[data-theme="dark"] .figma-filter-bar { border-color:#334155; background:#111827; } html[data-theme="dark"] .figma-cta { border-color:#1d4ed8; background:#172554; }
   </style>
 </head>
 <body>
