@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block t %}Ciberseguridad y privacidad{% endblock %}
+{% block c %}
+<section class="hero">
+  <span class="eyebrow">Confianza digital</span>
+  <h2>Ciberseguridad y privacidad en ALINEA</h2>
+  <p class="mute">Diseñamos el registro y las cookies para que puedas usar el asistente y guardar tu ruta sin exponer información innecesaria.</p>
+</section>
+<section class="security-card">
+  <div class="section-title"><b>Protecciones activas</b><small>{{ total_registros }} registro(s) institucional(es)</small></div>
+  <div class="security-list">
+    <div><strong>Correo institucional</strong><span>Solo aceptamos dominios autorizados de la Universidad Santo Tomás.</span></div>
+    <div><strong>Sin contraseñas</strong><span>Guardamos el correo y la fecha; nunca solicitamos ni almacenamos contraseñas.</span></div>
+    <div><strong>Cookies técnicas</strong><span>Se usan para sesión y consentimiento, con HttpOnly y SameSite.</span></div>
+    <div><strong>Sesiones firmadas</strong><span>Flask protege la sesión con una clave de aplicación.</span></div>
+    <div><strong>Datos mínimos</strong><span>La IP se registra únicamente como hash para auditoría básica.</span></div>
+    <div><strong>Cabeceras web</strong><span>Se aplican protecciones contra contenido malicioso e inserción en iframes.</span></div>
+  </div>
+</section>
+<section class="p">
+  <div class="section-title"><b>¿Qué se registra?</b><small>orden de llegada e identificador</small></div>
+  <p>Al registrarte, SQLite asigna automáticamente un ID incremental. La tabla conserva la fecha de registro y ordena los usuarios por <strong>fecha_registro, id</strong>. Esto permite identificar quién llegó primero sin modificar registros anteriores.</p>
+  <p class="source-note">Para un despliegue real recomendamos activar HTTPS, cambiar <code>ALINEA_SECRET_KEY</code>, configurar copias de seguridad y publicar una política de tratamiento de datos aprobada por la institución.</p>
+</section>
+{% endblock %}

@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block t %}{{ p.nombre }}{% endblock %}
+{% block c %}
+<section class="academic-hero">
+  <div class="academic-intro">
+    <span class="eyebrow">Programa acad&eacute;mico</span>
+    <h2>{{ p.nombre }}</h2>
+    <p class="mute">Consulta el plan de habilidades, su relaci&oacute;n con el mercado laboral y las oportunidades disponibles.</p>
+    <div class="profile-list">{% for perfil in p.perfiles %}<span>{{ perfil }}</span>{% endfor %}</div>
+  </div>
+  <aside class="academic-panel" aria-label="Resumen del programa">
+    <img class="program-visual" src="{{ url_for('static', filename='illustrations/career-' ~ p.id ~ '.svg') }}" alt="Ilustraci&oacute;n de {{ p.nombre }}">
+    <span class="academic-panel-label">Ficha del programa</span>
+    <div class="academic-stats">
+      <div><strong>{{ p.ensena|length }}</strong><span>habilidades en materias</span></div>
+      <div><strong>{{ p.ofertas_reales|length }}</strong><span>ofertas vinculadas</span></div>
+    </div>
+    <div class="academic-actions"><a href="#ofertas-panel">Ver ofertas</a><a href="#plan-academico">Ver plan</a></div>
+  </aside>
+</section>
+<div class="kpis" aria-label="Resumen de la carrera">
+  <div class="kpi" style="--delay:0ms"><div class="kpi-icon" aria-hidden="true">&#10022;</div><strong>{{ p.n_ensena }}</strong><span>habilidades identificadas</span><small>en el plan analizado</small></div>
+  <div class="kpi" style="--delay:100ms"><div class="kpi-icon" aria-hidden="true">&#8599;</div><strong>{{ p.n_utiles }}</strong><span>con utilidad alta o media</span><small>alineadas con la demanda</small></div>
+  <div class="kpi" style="--delay:200ms"><div class="kpi-icon" aria-hidden="true">!</div><strong>{{ p.faltan|length }}</strong><span>habilidades por revisar</span><small>aparecen en ofertas y no en materias</small></div>
+</div>
+<div class="p offers-section" id="ofertas-panel" data-programa-id="{{ p.id }}">
+  <div class="section-title"><b>Ofertas para esta ingenier&iacute;a</b><small>filtradas por sus perfiles y habilidades</small></div>
+  <p class="source-note">Son anuncios p&uacute;blicos vinculados por habilidades. Pueden cerrarse o cambiar; confirma los datos antes de postularte.</p>
+  <div class="offer-tools">
+    <input id="offer-filter" type="search" placeholder="Filtrar cargo o empresa" aria-label="Filtrar ofertas">
+    <select id="offer-city-filter" aria-label="Filtrar por ciudad"><option value="">Todas las ciudades</option></select>
+    <select id="offer-mode-filter" aria-label="Filtrar por modalidad"><option value="">Todas las modalidades</option></select>
+    <button class="refresh-btn" id="refresh-offers" type="button">Actualizar ofertas</button>
+    <p class="status-line" id="offers-status" role="status">Mostrando ofertas guardadas. Pulsa actualizar para consultar ofertas nuevas.</p>
+  </div>
+  <div class="offer-grid" id="offer-grid">
+  {% for o in p.ofertas_reales %}
+    <article class="offer-card" data-city="{{ o.ciudad }}" data-mode="{{ o.modalidad }}" data-search="{{ o.titulo }} {{ o.empresa }}">
+      <h3>{{ o.titulo }}</h3><div class="offer-company">{{ o.empresa }}</div>
+      <div class="offer-meta">{{ o.ciudad }} &middot; {{ o.modalidad }} &middot; {{ o.contrato }}</div>
+      <div class="offer-salary">{{ o.salario }}</div><div class="offer-requirements">{{ o.requisitos }}</div>
+      <div class="offer-skills">{% for habilidad in o.habilidades %}<a href="/buscar?q={{ habilidad|urlencode }}">{{ habilidad }}</a>{% endfor %}</div>
+      <div class="offer-source"><span>{{ o.fuente }} &middot; {{ o.fecha_consulta }}</span><a class="offer-link" href="{{ o.url }}" target="_blank" rel="noopener noreferrer">Postularme &#8599;</a></div>
+    </article>
+  {% else %}<p class="status-line">No hay ofertas guardadas para esta ingenier&iacute;a. Pulsa actualizar para buscar nuevas.</p>{% endfor %}
+  </div>
+  <div class="offer-more">
+    <div><strong>Explora m&aacute;s vacantes</strong><span>Busca nuevas publicaciones relacionadas con este programa.</span></div>
+    <div class="offer-more-links">
+      <a href="https://www.linkedin.com/jobs/search/?keywords={{ p.nombre|urlencode }}" target="_blank" rel="noopener noreferrer">LinkedIn &#8599;</a>
+      <a href="https://co.computrabajo.com/trabajo-de-{{ p.nombre|lower|replace(' ', '-')|urlencode }}" target="_blank" rel="noopener noreferrer">Computrabajo &#8599;</a>
+      <a href="https://co.indeed.com/jobs?q={{ p.nombre|urlencode }}" target="_blank" rel="noopener noreferrer">Indeed &#8599;</a>
+    </div>
+  </div>
+</div>
+<div class="p" id="plan-academico"><div class="section-title"><b>Lo que ense&ntilde;a la carrera</b><small>y qu&eacute; tan &uacute;til resulta</small></div><div class="table-wrap"><table><thead><tr><th scope="col">Habilidad</th><th scope="col">En ofertas</th><th scope="col">Utilidad</th><th scope="col">D&oacute;nde se ense&ntilde;a</th></tr></thead><tbody>
+{% for h in p.ensena %}<tr><td><a href="/habilidad/{{ h.id }}">{{ h.nombre }}</a></td><td><div class="bar"><i style="--bar-width: {{ h.pct }}%" aria-hidden="true"></i><span>{{ h.pct }}%</span></div>{% if h.pocas %}<span class="pocas">pocas ofertas ({{ h.n }})</span>{% endif %}</td><td><span class="tag {{ h.nivel.split()[0] }}">{{ h.nivel }}</span></td><td>{{ h.materias|join('; ') }}</td></tr>{% endfor %}
+</tbody></table></div></div>
+<div class="p"><div class="section-title"><b>Brechas de aprendizaje</b><small>el mercado las pide y no aparecen en las materias</small></div>
+{% if p.faltan %}<div class="table-wrap"><table><thead><tr><th scope="col">Habilidad</th><th scope="col">En ofertas</th><th scope="col">Utilidad</th></tr></thead><tbody>{% for h in p.faltan %}<tr><td><a href="/habilidad/{{ h.id }}">{{ h.nombre }}</a></td><td><div class="bar"><i style="--bar-width: {{ h.pct }}%" aria-hidden="true"></i><span>{{ h.pct }}%</span></div>{% if h.pocas %}<span class="pocas">pocas ofertas ({{ h.n }})</span>{% endif %}</td><td><span class="tag {{ h.nivel.split()[0] }}">{{ h.nivel }}</span></td></tr>{% endfor %}</tbody></table></div>{% else %}<p>Ninguna habilidad con demanda media o alta queda fuera de las materias.</p>{% endif %}</div>
+<script>
+(() => {
+  const panel = document.getElementById('ofertas-panel');
+  const grid = document.getElementById('offer-grid');
+  const search = document.getElementById('offer-filter');
+  const city = document.getElementById('offer-city-filter');
+  const mode = document.getElementById('offer-mode-filter');
+  const refresh = document.getElementById('refresh-offers');
+  const status = document.getElementById('offers-status');
+  if (!panel || !grid) return;
+  const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]));
+  const cardData = () => [...grid.querySelectorAll('.offer-card')];
+  const options = (selector, values) => {
+    const selected = selector.value;
+    selector.innerHTML = '<option value="">Todas</option>' + [...new Set(values.filter(Boolean))].sort().map(value => '<option value="' + esc(value) + '">' + esc(value) + '</option>').join('');
+    selector.value = selected;
+  };
+  const applyFilters = () => {
+    const query = search.value.toLowerCase().trim();
+    cardData().forEach(card => {
+      const matches = (!query || card.dataset.search.toLowerCase().includes(query)) &&
+        (!city.value || card.dataset.city === city.value) &&
+        (!mode.value || card.dataset.mode === mode.value);
+      card.hidden = !matches;
+    });
+  };
+  const populate = () => {
+    options(city, cardData().map(card => card.dataset.city));
+    options(mode, cardData().map(card => card.dataset.mode));
+    applyFilters();
+  };
+  const render = (offers) => {
+    grid.innerHTML = offers.map(o => '<article class="offer-card" data-city="' + esc(o.ciudad) + '" data-mode="' + esc(o.modalidad) + '" data-search="' + esc(o.titulo + ' ' + o.empresa) + '">' +
+      '<h3>' + esc(o.titulo) + '</h3><div class="offer-company">' + esc(o.empresa) + '</div>' +
+      '<div class="offer-meta">' + esc(o.ciudad) + ' · ' + esc(o.modalidad) + ' · ' + esc(o.contrato) + '</div>' +
+      '<div class="offer-salary">' + esc(o.salario) + '</div><div class="offer-requirements">' + esc(o.requisitos) + '</div>' +
+      '<div class="offer-skills">' + (o.habilidades || []).map(h => '<a href="/buscar?q=' + encodeURIComponent(h) + '">' + esc(h) + '</a>').join('') + '</div>' +
+      '<div class="offer-source"><span>' + esc(o.fuente) + ' · ' + esc(o.fecha_consulta) + '</span><a class="offer-link" href="' + esc(o.url) + '" target="_blank" rel="noopener noreferrer">Postularme ↗</a></div></article>').join('');
+    populate();
+  };
+  [search, city, mode].forEach(input => input.addEventListener('input', applyFilters));
+  populate();
+  refresh.addEventListener('click', async () => {
+    refresh.disabled = true; refresh.setAttribute('aria-busy', 'true'); status.textContent = 'Consultando ofertas nuevas...';
+    try {
+      const response = await fetch('/api/ofertas/actualizar', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({programa_id:Number(panel.dataset.programaId)})});
+      const result = await response.json();
+      if (!result.ok) { status.textContent = result.mensaje; return; }
+      render(result.ofertas); status.textContent = result.mensaje + ' Última consulta: ahora.';
+    } catch (error) { status.textContent = 'No se pudo conectar con la fuente de ofertas.'; }
+    finally { refresh.disabled = false; refresh.removeAttribute('aria-busy'); }
+  });
+})();
+</script>
+{% endblock %}

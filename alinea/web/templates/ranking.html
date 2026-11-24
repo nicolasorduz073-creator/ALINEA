@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block t %}Ranking de demanda{% endblock %}
+{% block c %}
+<section class="hero"><span class="eyebrow">Panorama laboral</span><h2>Ranking de utilidad laboral</h2><p class="mute">Explora qué habilidades aparecen con mayor frecuencia en las ofertas analizadas y dónde se enseñan.</p></section>
+<div class="p"><div class="table-wrap"><table><caption>Habilidades más mencionadas</caption><thead><tr><th scope="col">#</th><th scope="col">Habilidad</th><th scope="col">Ofertas</th><th scope="col">Utilidad</th><th scope="col">Materias USTA</th></tr></thead><tbody>
+{% for r in rk %}<tr><td>{{ r.puesto }}</td><td><a href="/habilidad/{{ r.id }}">{{ r.nombre }}</a></td><td><div class="bar"><i style="--bar-width: {{ r.pct }}%" aria-hidden="true"></i><span>{{ r.pct }}%</span></div></td><td><span class="tag {{ r.nivel.split()[0] }}">{{ r.nivel }}</span></td><td>{{ r.n_materias }}</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

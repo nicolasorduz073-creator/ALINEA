@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block t %}Buscar una habilidad{% endblock %}
+{% block c %}
+<section class="hero"><span class="eyebrow">Busca por palabra clave</span><h2>&iquest;Qu&eacute; habilidad quieres explorar?</h2><p class="mute">Busca por nombre, sigla o categor&iacute;a: Python, SQL, AutoCAD, redes&hellip;</p></section>
+<form method="get" role="search"><label class="skip" for="q">Habilidad</label><input id="q" name="q" value="{{ q }}" placeholder="Ej.: Python, SQL, AutoCAD&hellip;" autocomplete="off" autofocus><button type="submit">Buscar</button></form>
+{% if res is not none %}
+<div class="p"><div class="section-title"><b>{{ res|length }} resultado(s)</b><small>para &laquo;{{ q }}&raquo;</small></div>
+{% if res %}<div class="table-wrap"><table><thead><tr><th scope="col">Habilidad</th><th scope="col">Ofertas</th><th scope="col">Utilidad</th><th scope="col">Materias USTA</th></tr></thead><tbody>
+{% for r in res %}<tr><td><a href="/habilidad/{{ r.id }}">{{ r.nombre }}</a></td><td><div class="bar"><i style="--bar-width: {{ r.pct }}%" aria-hidden="true"></i><span>{{ r.pct }}%</span></div></td><td><span class="tag {{ r.nivel.split()[0] }}">{{ r.nivel }}</span></td><td>{% if r.n_materias %}{{ r.n_materias }}{% else %}<span class="tag Muestra">No se ense&ntilde;a</span>{% endif %}</td></tr>{% endfor %}
+</tbody></table></div>{% else %}<p>No encontramos esa habilidad. Prueba con Python, SQL, Git o una categor&iacute;a.</p>{% endif %}</div>
+{% else %}
+<div class="p"><div class="section-title"><b>Las 8 habilidades m&aacute;s pedidas</b><small>de {{ total }} ofertas</small></div><div class="table-wrap"><table><thead><tr><th scope="col">#</th><th scope="col">Habilidad</th><th scope="col">Ofertas</th><th scope="col">Utilidad</th></tr></thead><tbody>
+{% for r in top %}<tr><td>{{ r.puesto }}</td><td><a href="/habilidad/{{ r.id }}">{{ r.nombre }}</a></td><td>{{ r.pct }}%</td><td><span class="tag {{ r.nivel.split()[0] }}">{{ r.nivel }}</span></td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endif %}
+{% if recursos %}
+<section class="p" id="aprender">
+  <div class="section-title"><b>{% if q %}Aprende lo que esta b&uacute;squeda no cubre{% else %}Habilidades que puedes aprender por tu cuenta{% endif %}</b><small>recursos recomendados para comenzar</small></div>
+  <p class="source-note">Estas habilidades no aparecen asociadas a materias cargadas en ALINEA. Los enlaces llevan a documentaci&oacute;n, cursos o pr&aacute;ctica interactiva.</p>
+  <div class="learning-grid">
+  {% for habilidad in recursos %}
+    <article class="learning-card">
+      <h3>{{ habilidad.nombre }}</h3><p>{{ habilidad.categoria }} &middot; no se ense&ntilde;a actualmente</p>
+      {% for recurso in habilidad.recursos %}<a class="resource-link" href="{{ recurso.url }}" target="_blank" rel="noopener noreferrer">{{ recurso.nombre }} &#8599;</a>{% endfor %}
+    </article>
+  {% endfor %}
+  </div>
+</section>
+{% elif res and q %}
+<section class="p learning-empty"><b>Esta habilidad s&iacute; aparece en las materias cargadas.</b><p class="mute">Puedes revisar su detalle, las ofertas relacionadas y otras habilidades que complementan tu perfil.</p></section>
+{% endif %}
+{% endblock %}

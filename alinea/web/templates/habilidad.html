@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block t %}{{ h.nombre }}{% endblock %}
+{% block c %}
+<section class="hero"><span class="eyebrow">{{ h.categoria }}</span><h2>{{ h.nombre }}</h2><div class="big">{{ h.pct }}%</div><p class="mute">de las ofertas la piden ({{ h.n_ofertas }} de {{ h.total_ofertas }}) · puesto {{ h.puesto }} en el ranking</p><p>Utilidad laboral: <span class="tag {{ h.nivel.split()[0] }}">{{ h.nivel }}</span></p></section>
+{% if h.ofertas_reales %}
+<div class="p"><div class="section-title"><b>Ofertas que mencionan esta habilidad</b><small>fuentes públicas</small></div><p class="source-note">La información se conserva como referencia y puede cambiar cuando el anuncio se actualiza o cierra.</p><div class="offer-grid">
+{% for o in h.ofertas_reales %}<article class="offer-card"><h3>{{ o.titulo }}</h3><div class="offer-company">{{ o.empresa }}</div><div class="offer-meta">{{ o.ciudad }} · {{ o.modalidad }}</div><div class="offer-salary">{{ o.salario }}</div><div class="offer-requirements">{{ o.requisitos }}</div><div class="offer-source"><span>{{ o.fuente }} · {{ o.fecha_consulta }}</span><a class="offer-link" href="{{ o.url }}" target="_blank" rel="noopener noreferrer">Ver oferta ↗</a></div></article>{% endfor %}
+</div></div>
+{% endif %}
+<div class="p"><div class="section-title"><b>¿Dónde la enseña la Universidad Santo Tomás?</b></div>{% if h.materias %}<div class="table-wrap"><table><thead><tr><th scope="col">Programa</th><th scope="col">Materia</th><th scope="col">Semestre</th></tr></thead><tbody>{% for m in h.materias %}<tr><td>{{ m.programa }}</td><td>{{ m.materia }}</td><td>{{ m.semestre }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<p>Ninguna materia de los programas cargados la incluye.</p>{% endif %}</div>
+<div class="p"><div class="section-title"><b>Demanda por perfil de empleo</b></div><div class="table-wrap"><table><thead><tr><th scope="col">Perfil</th><th scope="col">Ofertas que la piden</th></tr></thead><tbody>{% for p in h.perfiles %}<tr><td>{{ p.perfil }}</td><td><div class="bar"><i style="--bar-width: {{ p.pct }}%" aria-hidden="true"></i><span>{{ p.pct }}% ({{ p.piden }} de {{ p.total }})</span></div></td></tr>{% endfor %}</tbody></table></div></div>
+<div class="p"><div class="section-title"><b>De dónde sale el dato</b><small>fragmentos de ofertas analizadas</small></div>{% for f in h.fragmentos %}<blockquote>{{ f.fragmento }}<br><small>{{ f.titulo }} · {{ f.empresa }} · fuente: {{ f.fuente }}</small></blockquote>{% endfor %}</div>
+{% endblock %}
