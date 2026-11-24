@@ -701,6 +701,12 @@
     html[data-theme="dark"] .offer-skills a, html[data-theme="dark"] .tag, html[data-theme="dark"] .profile-list span { color:#bfdbfe !important; background:#172554; border-color:#1d4ed8; }
     html[data-theme="dark"] .button-quiet { color:#bfdbfe; border-color:#475569; background:#111827; } html[data-theme="dark"] .button-quiet:hover { color:#fff; background:#1e3a8a; border-color:#93c5fd; }
     html[data-theme="dark"] .offer-tools, html[data-theme="dark"] .figma-filter-bar { border-color:#334155; background:#111827; } html[data-theme="dark"] .figma-cta { border-color:#1d4ed8; background:#172554; }
+    /* Lockup integrado: el fondo del logo forma parte del encabezado, no una imagen suelta. */
+    .site-head > div:first-child { display:flex; flex-direction:column; align-items:flex-start; gap:10px; }
+    .site-head h1 { display:flex; align-items:center; margin:0; padding:8px 12px; border-radius:8px; background:#0b3f49; }
+    .site-head .brand-logo { width:270px; height:auto; }
+    .site-head .sub { margin:0 0 0 3px; }
+    html[data-theme="dark"] .site-head h1 { background:#0b3f49; }
   </style>
 </head>
 <body>
