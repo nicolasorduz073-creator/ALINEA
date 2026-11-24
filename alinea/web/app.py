@@ -78,6 +78,10 @@ def seguridad():
     total = con.execute("SELECT COUNT(*) AS total FROM usuario").fetchone()["total"]
     return render_template("seguridad.html", total_registros=total)
 
+@app.route("/ayuda")
+def ayuda():
+    return render_template("ayuda.html")
+
 @app.post("/api/registro")
 def registro():
     data = request.get_json(silent=True) or request.form
